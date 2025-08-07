@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Class Schedule</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 25px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #34495e, #2c3e50);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        h1 {
+            margin: 0 0 10px 0;
+            font-size: 3em;
+            font-weight: 300;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            letter-spacing: 2px;
+        }
+        
+        .subtitle {
+            margin: 0;
+            font-size: 1.2em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0;
+            padding: 0;
+        }
+        
+        .day-column {
+            border-right: 1px solid #e8ecf0;
+            min-height: 700px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .day-column:last-child {
+            border-right: none;
+        }
+        
+        .day-header {
+            background: linear-gradient(135deg, #3498db, #2980b9, #1abc9c);
+            color: white;
+            padding: 25px 15px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.1em;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .day-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 2px;
+        }
+        
+        .day-content {
+            padding: 25px 15px;
+            background: linear-gradient(180deg, #fdfdfd 0%, #f8f9fa 100%);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .class-item {
+            background: linear-gradient(135deg, #ffffff, #f8f9fc);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 6px solid #3498db;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .class-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(52, 152, 219, 0.5), transparent);
+        }
+        
+        .class-item:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        
+        .class-time {
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 0.9em;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 8px;
+        }
+        
+        .class-time::before {
+            content: "⏰";
+            margin-right: 10px;
+            font-size: 1.1em;
+        }
+        
+        .class-code {
+            color: #e74c3c;
+            font-weight: 700;
+            font-size: 0.85em;
+            margin-bottom: 8px;
+            padding: 4px 8px;
+            background: rgba(231, 76, 60, 0.1);
+            border-radius: 6px;
+            display: inline-block;
+        }
+        
+        .class-name {
+            color: #34495e;
+            font-size: 0.8em;
+            line-height: 1.5;
+            margin-bottom: 12px;
+            font-weight: 500;
+            flex: 1;
+        }
+        
+        .class-location {
+            color: #7f8c8d;
+            font-size: 0.75em;
+            font-style: italic;
+            display: flex;
+            align-items: center;
+            padding: 6px 10px;
+            background: rgba(127, 140, 141, 0.1);
+            border-radius: 6px;
+            margin-top: auto;
+        }
+        
+        .class-location::before {
+            content: "📍";
+            margin-right: 8px;
+        }
+        
+        .no-classes {
+            text-align: center;
+            color: #95a5a6;
+            font-style: italic;
+            padding: 60px 20px;
+            font-size: 1.1em;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .no-classes::before {
+            content: "🌅";
+            display: block;
+            font-size: 3em;
+            margin-bottom: 15px;
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 768px) {
+            .schedule-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .day-column {
+                border-right: none;
+                border-bottom: 2px solid #ecf0f1;
+                min-height: auto;
+            }
+            
+            .day-column:last-child {
+                border-bottom: none;
+            }
+            
+            .class-item {
+                min-height: 100px;
+            }
+        }
+        
+        @media (max-width: 1200px) and (min-width: 769px) {
+            .schedule-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .day-column:nth-child(4) {
+                grid-column: 1;
+            }
+            
+            .day-column:nth-child(5) {
+                grid-column: 2;
+            }
+            
+            .day-column:nth-child(6) {
+                grid-column: 3;
+            }
+        }
+        
+        .lab-class {
+            border-left-color: #f39c12;
+        }
+        
+        .lab-class::before {
+            background: linear-gradient(90deg, transparent, rgba(243, 156, 18, 0.5), transparent);
+        }
+        
+        .lab-class .class-time {
+            background: rgba(243, 156, 18, 0.1);
+        }
+        
+        .lec-class {
+            border-left-color: #27ae60;
+        }
+        
+        .lec-class::before {
+            background: linear-gradient(90deg, transparent, rgba(39, 174, 96, 0.5), transparent);
+        }
+        
+        .lec-class .class-time {
+            background: rgba(39, 174, 96, 0.1);
+        }
+        
+        .online-class {
+            border-left-color: #9b59b6;
+            background: linear-gradient(135deg, #faf5ff, #f3e5f5);
+        }
+        
+        .online-class::before {
+            background: linear-gradient(90deg, transparent, rgba(155, 89, 182, 0.5), transparent);
+        }
+        
+        .online-class .class-time {
+            background: rgba(155, 89, 182, 0.15);
+        }
+        
+        /* Symmetrical spacing for all columns */
+        .day-content {
+            justify-content: flex-start;
+        }
+        
+        .class-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Add legend */
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 20px;
+            background: rgba(248, 249, 250, 0.8);
+            border-top: 1px solid #e8ecf0;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.9em;
+            color: #34495e;
+            font-weight: 500;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            margin-right: 10px;
+            border: 2px solid;
+        }
+        
+        .legend-lec .legend-color {
+            background: rgba(39, 174, 96, 0.2);
+            border-color: #27ae60;
+        }
+        
+        .legend-lab .legend-color {
+            background: rgba(243, 156, 18, 0.2);
+            border-color: #f39c12;
+        }
+        
+        .legend-online .legend-color {
+            background: rgba(155, 89, 182, 0.2);
+            border-color: #9b59b6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Weekly Class Schedule</h1>
+            <p class="subtitle">2nd Year / 1st Semester • Section MMLS 2-4</p>
+        </div>
+        
+        <div class="schedule-grid">
+            <!-- Monday -->
+            <div class="day-column">
+                <div class="day-header">Monday</div>
+                <div class="day-content">
+                    <div class="class-item lec-class">
+                        <div class="class-time">07:00 AM - 09:00 AM</div>
+                        <div class="class-code">AGE3 21</div>
+                        <div class="class-name">Dance, Sports, Martial Arts, Group Exercise, Outdoor and Adventure Activities</div>
+                        <div class="class-location">Social Hall 20</div>
+                    </div>
+                    <div class="class-item lec-class">
+                        <div class="class-time">10:00 AM - 01:00 PM</div>
+                        <div class="class-code">MPB1 21 LEC</div>
+                        <div class="class-name">Human Anatomy and Physiology with Pathophysiology</div>
+                        <div class="class-location">Room 7406</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tuesday -->
+            <div class="day-column">
+                <div class="day-header">Tuesday</div>
+                <div class="day-content">
+                    <div class="class-item lec-class">
+                        <div class="class-time">10:30 AM - 12:00 PM</div>
+                        <div class="class-code">AEG2 00</div>
+                        <div class="class-name">Pagbasa at Pagsulat Tungo sa Pananaliksik</div>
+                        <div class="class-location">Room 7307</div>
+                    </div>
+                    <div class="class-item lec-class">
+                        <div class="class-time">01:30 PM - 03:00 PM</div>
+                        <div class="class-code">AGE9 00</div>
+                        <div class="class-name">Life, Works and Writings of Rizal</div>
+                        <div class="class-location">Room 7405</div>
+                    </div>
+                    <div class="class-item lec-class">
+                        <div class="class-time">04:00 PM - 06:00 PM</div>
+                        <div class="class-code">MPB4 21 LEC</div>
+                        <div class="class-name">Biostatistics and Epidemiology</div>
+                        <div class="class-location">Room 7406</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Wednesday -->
+            <div class="day-column">
+                <div class="day-header">Wednesday</div>
+                <div class="day-content">
+                    <div class="class-item lec-class">
+                        <div class="class-time">07:00 AM - 10:00 AM</div>
+                        <div class="class-code">MPB3 21 LEC</div>
+                        <div class="class-name">Biochemistry for Medical Laboratory Sciences</div>
+                        <div class="class-location">Room 7406</div>
+                    </div>
+                    <div class="class-item lab-class">
+                        <div class="class-time">10:00 AM - 01:00 PM</div>
+                        <div class="class-code">MPB1 21 LAB</div>
+                        <div class="class-name">Human Anatomy and Physiology with Pathophysiology</div>
+                        <div class="class-location">Anatomy Laboratory</div>
+                    </div>
+                    <div class="class-item lec-class">
+                        <div class="class-time">04:00 PM - 07:00 PM</div>
+                        <div class="class-code">MPB2 21</div>
+                        <div class="class-name">Principles and Strategies of Teaching in Medical Laboratory Sciences</div>
+                        <div class="class-location">Room 7406</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Thursday -->
+            <div class="day-column">
+                <div class="day-header">Thursday</div>
+                <div class="day-content">
+                    <div class="class-item lab-class">
+                        <div class="class-time">07:00 AM - 10:00 AM</div>
+                        <div class="class-code">MPB3 21 LAB</div>
+                        <div class="class-name">Biochemistry for Medical Laboratory Sciences</div>
+                        <div class="class-location">Room 1406</div>
+                    </div>
+                    <div class="class-item lec-class">
+                        <div class="class-time">10:00 AM - 12:00 PM</div>
+                        <div class="class-code">MCB1 21</div>
+                        <div class="class-name">Cytogenetics</div>
+                        <div class="class-location">Room 7406</div>
+                    </div>
+                    <div class="class-item online-class">
+                        <div class="class-time">05:00 PM - 08:00 PM</div>
+                        <div class="class-code">MPB4 21 LAB</div>
+                        <div class="class-name">Biostatistics and Epidemiology</div>
+                        <div class="class-location">Online 33</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Friday -->
+            <div class="day-column">
+                <div class="day-header">Friday</div>
+                <div class="day-content">
+                    <div class="class-item online-class">
+                        <div class="class-time">07:00 AM - 08:00 AM</div>
+                        <div class="class-code">ECF1 13</div>
+                        <div class="class-name">Emilian Culture Formation</div>
+                        <div class="class-location">Online 29</div>
+                    </div>
+                    <div class="class-item online-class">
+                        <div class="class-time">10:30 AM - 12:00 PM</div>
+                        <div class="class-code">AEG2 00</div>
+                        <div class="class-name">Pagbasa at Pagsulat Tungo sa Pananaliksik</div>
+                        <div class="class-location">Online 24</div>
+                    </div>
+                    <div class="class-item online-class">
+                        <div class="class-time">01:30 PM - 03:00 PM</div>
+                        <div class="class-code">AGE9 00</div>
+                        <div class="class-name">Life, Works and Writings of Rizal</div>
+                        <div class="class-location">Online 25</div>
+                    </div>
+                    <div class="class-item online-class">
+                        <div class="class-time">05:00 PM - 08:00 PM</div>
+                        <div class="class-code">MPB1 21 LAB</div>
+                        <div class="class-name">Human Anatomy and Physiology with Pathophysiology</div>
+                        <div class="class-location">Online 32</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Saturday -->
+            <div class="day-column">
+                <div class="day-header">Saturday</div>
+                <div class="day-content">
+                    <div class="class-item online-class">
+                        <div class="class-time">07:00 AM - 10:00 AM</div>
+                        <div class="class-code">MPB3 21 LAB</div>
+                        <div class="class-name">Biochemistry for Medical Laboratory Sciences</div>
+                        <div class="class-location">Online 34</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="legend">
+            <div class="legend-item legend-lec">
+                <div class="legend-color"></div>
+                <span>In-person Lectures</span>
+            </div>
+            <div class="legend-item legend-lab">
+                <div class="legend-color"></div>
+                <span>In-person Labs</span>
+            </div>
+            <div class="legend-item legend-online">
+                <div class="legend-color"></div>
+                <span>Online Classes</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
